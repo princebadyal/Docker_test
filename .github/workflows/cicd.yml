@@ -1,0 +1,23 @@
+name: Deploy on Ec2 Server
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-server:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy on 1st Server
+      uses: appleboy/ssh-action@master
+      with:
+         host: '${{ secrets.SERVER }}'
+         username: '${{ secrets.USERNAME }}'
+         key: '${{ secrets.AWS_PRIVATE_KEY }}'
+         port: '${{ secrets.PORT }}'
+         script: |
+          cd /var/www/html/Docker_test/
+          git config --global --add safe.directory /var/www/html/Docker_test
+          sudo git stash
+          sudo git pull origin main
